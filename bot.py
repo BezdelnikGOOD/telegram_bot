@@ -70,7 +70,10 @@ async def start(update: Update, context):
         "Зарегистрируйся:\n"
         "/reg логин пароль\n\n"
         "Если уже есть аккаунт:\n"
-        "/login логин пароль"
+        "/login логин пароль\n\n"
+        "После входа:\n"
+        "/profile — показать профиль\n"
+        "/logout — выйти"
     )
 
 async def register(update: Update, context):
@@ -125,7 +128,7 @@ async def logout(update: Update, context):
         await update.message.reply_text("❌ Вы не авторизованы.")
 
 async def add_balance(update: Update, context):
-    # Только для админов (замени на свой ID)
+    # Только для админов (замени на свой Telegram ID)
     ADMIN_IDS = [6573154279]  # твой Telegram ID
     user_id = update.effective_user.id
     if user_id not in ADMIN_IDS:
@@ -148,7 +151,8 @@ async def add_balance(update: Update, context):
         await update.message.reply_text("❌ Пользователь не найден.")
         return
     update_balance(login, amount)
-    await update.message.reply_text(f"✅ Баланс {login} пополнен на {amount} монет. Текущий баланс: {user['balance'] + amount}")
+    user = get_user(login)
+    await update.message.reply_text(f"✅ Баланс {login} пополнен на {amount} монет. Текущий баланс: {user['balance']}")
 
 async def echo(update: Update, context):
     if update.message.text:
@@ -163,7 +167,7 @@ def main():
     app.add_handler(CommandHandler("logout", logout))
     app.add_handler(CommandHandler("add", add_balance))
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, echo))
-    print("✅ Бот с регистрацией запущен...")
+    print("✅ Бот запущен...")
     app.run_polling()
 
 if __name__ == "__main__":
