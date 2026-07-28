@@ -1,0 +1,11 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "python bot_balance_simple.py",
+    "healthcheckPath": "/",
+    "restartPolicyType": "ON_FAILURE",
+    "port": 8080
+  }
+}
